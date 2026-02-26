@@ -3,9 +3,11 @@ name: AI Tools Affiliate Review
 on:
   # Chạy thủ công
   workflow_dispatch:
-  # Hoặc hàng tuần (Chủ nhật 9 AM Vietnam)
+  # Chạy 3 lần/ngày: 8h, 14h, 20h Vietnam (1:00, 7:00, 13:00 UTC)
   schedule:
-    - cron: '0 2 * * 0'
+    - cron: '0 1 * * *'    # 8 AM Vietnam
+    - cron: '0 7 * * *'    # 2 PM Vietnam
+    - cron: '0 13 * * *'   # 8 PM Vietnam
 
 jobs:
   affiliate-scraper:
