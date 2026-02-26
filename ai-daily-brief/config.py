@@ -116,8 +116,8 @@ KEYWORDS = [
 ]
 
 # Limits
-MAX_ARTICLES = 100  # Tăng lên 100 bài
-HOURS_BACK = 24  # 24 hours
+MAX_ARTICLES = 100
+HOURS_BACK = 48  # 48 hours = 2 days to get more articles
 
 # API Configuration - Gemini default, OpenAI fallback
 FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API")
