@@ -1,155 +1,154 @@
-# AI Daily Brief Generator - Tài liệu Dự án
+# AI Daily Brief - Tài liệu Dự án
 
 ## Mục tiêu
 
-Tạo script Python chạy daily để generate Vietnamese AI opportunity briefing từ 4 RSS feeds, sử dụng:
-- **Firecrawl** - Extract content từ articles
-- **AI API** (OpenAI mặc định, Gemini fallback) - Analyze và generate insights
-- Output: Markdown report trong thư mục `reports/`
+Tạo hệ thống tự động tổng hợp tin tức AI và công nghệ mỗi ngày:
+- **Input**: Tin tức từ 25+ RSS feeds (AI, Tech, Mobile, Startup...)
+- **Xử lý**: AI (Gemini) phân tích và việt hóa nội dung
+- **Output**: Báo cáo tiếng Việt gửi qua Telegram + lưu GitHub
 
 ---
 
 ## Việc đã làm
 
-### 1. Cấu trúc Project
-
-Tạo các file trong `/Users/gray/vivu/firecralw/ai-daily-brief/`:
+### 1. Thiết lập Project
 
 ```
 ai-daily-brief/
 ├── main.py                 # Entry point
-├── config.py               # Configuration (URLs, API keys, settings)
-├── rss_fetcher.py          # RSS fetch & filter (24h, keywords, max 15)
-├── firecrawl_extractor.py  # Firecrawl SDK integration
-├── analyzer.py             # AI analysis (OpenAI/Gemini)
-├── consolidator.py         # Report generation
-├── requirements.txt        # Dependencies
-├── run.sh                 # Shell wrapper script
-└── reports/               # Output directory
+├── config.py               # RSS URLs, Keywords, API config
+├── rss_fetcher.py          # Fetch & filter RSS
+├── firecrawl_extractor.py  # Extract article content
+├── analyzer.py             # AI analysis (Gemini/OpenAI)
+├── consolidator.py         # Generate markdown report
+├── telegram_notifier.py    # Send to Telegram
+├── requirements.txt
+└── reports/               # Output reports
 ```
 
-### 2. Chi tiết từng Module
+### 2. Cấu hình RSS Feeds (25+ nguồn)
 
-#### `config.py`
-- 4 RSS feed URLs: TechCrunch AI, VentureBeat AI, MIT Technology Review, Y Combinator
-- Keywords filter: ai, agent, automation, llm, startup, funding, model
-- Limits: 15 articles/day, 24h timeframe
-- API config: OpenAI (default), Gemini (fallback)
+- **AI News**: TechCrunch AI, VentureBeat AI, MIT Tech Review
+- **Tech Giants**: Google AI Blog, OpenAI, Meta AI, Microsoft AI, NVIDIA
+- **Programming**: Hacker News, Dev.to, CSS-Tricks, JavaScript Weekly
+- **Mobile/Frontend**: Flutter, Dart, React, Vue
+- **Startup**: Product Hunt, TechCrunch Startups
 
-#### `rss_fetcher.py`
-- Fetch và parse RSS feeds bằng `feedparser`
-- Filter theo thời gian (24h) và keywords
-- Remove duplicates, limit 15 articles
-- Return list: {title, url, published_date}
+### 3. Keywords (100+ từ khóa)
 
-#### `firecrawl_extractor.py`
-- Sử dụng Firecrawl SDK để extract content
-- Chỉ lấy main content, bỏ nav/ads/footer
-- Return markdown content
+- AI: agent, agentic, automation, llm, gpt, openai, gemini, claude, deepseek...
+- Tools: mcp, cursor, windsurf, vibe coding, figma, stitch
+- Mobile: flutter, dart, swift, kotlin, react native
+- Startup: funding, venture, acquisition, launch
+- Tech: google, microsoft, apple, amazon, meta, nvidia...
 
-#### `analyzer.py`
-- **OpenAI** (mặc định): model `gpt-4o`
-- **Gemini** (fallback): model `gemini-1.5-flash`
-- Prompt phân tích tiếng Việt, trả về JSON với:
-  - summary, opportunities, key_insight, actionable
+### 4. API Integration
 
-#### `consolidator.py`
-- Merge all analyzed articles
-- Generate report với:
-  - Top 3 opportunities
-  - Emerging trends
-  - 5 actionable directions
-  - Recommendation for 3 hours
+| Service | API Key | Status |
+|---------|---------|--------|
+| Firecrawl | `FIRECRAWL_API` | ✅ Extract content |
+| Gemini | `GEMINI_API_KEY` | ✅ Analyze (model: gemini-2.5-flash) |
+| OpenAI | `OPENAI_API_KEY` | ✅ Fallback |
+| Telegram | `TELEGRAM_BOT_TOKEN` | ✅ Send notification |
 
-#### `main.py`
-- Orchestrate all modules
-- Handle errors gracefully
-- Save to `reports/ai-daily-brief-{DATE}.md`
+### 5. GitHub Actions Automation
 
-### 3. API Configuration
+```yaml
+# Chạy 3 lần/ngày
+- 7:00 AM Vietnam
+- 12:00 PM Vietnam
+- 7:00 PM Vietnam
+```
 
-| API | Biến môi trường | Model |
-|-----|------------------|-------|
-| Firecrawl | `FIRECRAWL_API` | - |
-| OpenAI | `OPENAI_API_KEY` | gpt-4o |
-| Gemini | `GEMINI_API_KEY` | gemini-1.5-flash |
+**Workflow**:
+1. Checkout code
+2. Install dependencies
+3. Run main.py (fetch → extract → analyze → generate)
+4. Commit & push report to GitHub
+5. Send to Telegram
 
-**Thứ tự ưu tiên:** OpenAI → Gemini (fallback)
+### 6. Telegram Bot
+
+- Gửi báo cáo tự động sau mỗi lần chạy
+- Format: HTML với link, tiếng Việt
+- Hiển thị: Top 10 tin nổi bật + tổng số bài
 
 ---
 
 ## Kết quả
 
-### Trạng thái hiện tại
+### Hiện tại
 
-- **Code**: ✅ Hoàn thành
-- **Dependencies**: ✅ Cài đặt được
-- **Chạy thử**: ✅ **Chạy thành công!**
+| Metric | Giá trị |
+|--------|---------|
+| Số bài/lần | 50-70 bài |
+| Thời gian lấy bài | 48 giờ |
+| Lần chạy/ngày | 3 lần |
+| Telegram | ✅ Hoạt động |
+| GitHub | ✅ Auto commit |
 
-### Các lỗi đã fix trong quá trình dev
+### Links
 
-1. **FIRECRAWL_API_KEY** → đổi thành `FIRECRAWL_API` trong config.py (vì biến môi trường trong .zshenv là `FIRECRAWL_API`)
-2. **Firecrawl API v2** → sửa code dùng `params={}` thay vì positional args
-3. **Firecrawl response** → xử lý dict response thay vì object (API v2 trả về dict)
-4. **Gemini model cũ** → đổi sang OpenAI làm primary (vì gemini-2.0-flash không còn available)
+- **GitHub Repo**: https://github.com/ainear/ai-daily-brief
+- **Reports**: https://github.com/ainear/ai-daily-brief/tree/main/ai-daily-brief/reports
 
-### Report đã tạo
+### Các lỗi đã fix trong quá trình phát triển
 
-- File: `reports/ai-daily-brief-2026-02-26.md`
-- 12 bài viết AI từ TechCrunch
-- Bao gồm: Top 3 cơ hội, xu hướng, 5 hành động cụ thể, chi tiết từng bài
+1. **FIRECRAWL_API_KEY** → `FIRECRAWL_API` (tên biến trong .zshenv)
+2. **Firecrawl API v2** → Sử dụng `params={}` thay vì positional args
+3. **Firecrawl response** → Xử lý dict thay vì object
+4. **Gemini model cũ** → Đổi sang `gemini-2.5-flash`
+5. **GitHub Actions push** → Thêm `permissions: contents: write`
 
 ---
 
-## Cách sử dụng
+## Hướng dẫn sử dụng
 
-### 1. Cài đặt
-
-```bash
-cd /Users/gray/vivu/firecralw/ai-daily-brief
-pip install -r requirements.txt
-```
-
-### 2. Set API Keys
-
-Thêm vào `.zshrc` hoặc `.zshenv`:
-```bash
-export FIRECRAWL_API="fc-xxx"  # Firecrawl API key
-export OPENAI_API_KEY="sk-xxx"  # OpenAI API key
-export GEMINI_API_KEY="AIzaSy..."  # Gemini API key (optional)
-```
-
-### 3. Chạy script
+### Chạy thủ công
 
 ```bash
+# Local
+cd ai-daily-brief
 python3 main.py
-# hoặc
-./run.sh
+
+# GitHub Actions
+gh workflow run daily-brief.yml --repo ainear/ai-daily-brief
 ```
 
-### 4. Cron job (6 AM daily)
+### Cấu hình thêm
 
-```bash
-crontab -e
-# Thêm dòng:
-0 6 * * * /Users/gray/vivu/firecralw/ai-daily-brief/run.sh >> /Users/gray/vivu/firecralw/ai-daily-brief/cron.log 2>&1
-```
+Chỉnh sửa `config.py`:
+- `MAX_ARTICLES`: Số bài tối đa
+- `HOURS_BACK`: Giờ lấy bài quá khứ
+- `RSS_FEED_URLS`: Thêm nguồn RSS
+- `KEYWORDS`: Thêm từ khóa lọc
 
-### 5. Output
+### Secrets trong GitHub
 
-Report sẽ được lưu tại:
-```
-reports/ai-daily-brief-YYYY-MM-DD.md
-```
+Vào Settings → Secrets and variables → Actions:
+- `FIRECRAWL_API`
+- `GEMINI_API_KEY`
+- `OPENAI_API_KEY`
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
 
 ---
 
-## Dependencies
+## Công nghệ sử dụng
 
-```
-feedparser==6.0.11
-firecrawl-py==1.6.1
-google-genai==0.1.0
-openai==1.58.1
-python-dateutil==2.9.0
-```
+- **Language**: Python 3.11
+- **RSS Parsing**: feedparser
+- **Content Extraction**: Firecrawl
+- **AI Analysis**: Google Gemini 2.5 Flash
+- **Notifications**: Telegram Bot API
+- **CI/CD**: GitHub Actions
+- **Host**: GitHub
+
+---
+
+## Cập nhật gần nhất
+
+- **2026-02-26**: Tăng lên 100 bài, 48 giờ, 3 lần/ngày
+- **2026-02-26**: Thêm Telegram notification
+- **2026-02-26**: Đổi sang Gemini 2.5 Flash
+- **2026-02-26**: Mở rộng RSS feeds và keywords
