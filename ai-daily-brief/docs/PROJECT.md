@@ -126,6 +126,19 @@ python3 affiliate_scraper.py
 - ✅ Tạo content tiếng Việt cho affiliate
 - ✅ Xuất markdown blog post
 
+### GitHub Actions (Workflow riêng)
+
+```yaml
+# File: .github/workflows/affiliate-review.yml
+- Chạy thủ công: workflow_dispatch
+- Hoặc hàng tuần: Chủ nhật 9 AM Vietnam
+```
+
+**Chạy thủ công:**
+```bash
+gh workflow run affiliate-review.yml --repo ainear/ai-daily-brief
+```
+
 ---
 
 ## Hướng dẫn sử dụng
