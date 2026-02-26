@@ -120,16 +120,16 @@ def analyze_with_openai(title: str, url: str, content: str) -> Optional[Dict]:
 
 
 def analyze_article(title: str, url: str, content: str) -> Optional[Dict]:
-    """Analyze article - try OpenAI first (more reliable), fallback to Gemini."""
-    # Try OpenAI first (more reliable)
-    if OPENAI_API_KEY:
-        result = analyze_with_openai(title, url, content)
+    """Analyze article - try Gemini first, fallback to OpenAI."""
+    # Try Gemini first (default)
+    if GEMINI_API_KEY:
+        result = analyze_with_gemini(title, url, content)
         if result:
             return result
 
-    # Fallback to Gemini
-    if GEMINI_API_KEY:
-        result = analyze_with_gemini(title, url, content)
+    # Fallback to OpenAI
+    if OPENAI_API_KEY:
+        result = analyze_with_openai(title, url, content)
         if result:
             return result
 
