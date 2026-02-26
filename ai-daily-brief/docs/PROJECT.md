@@ -102,6 +102,32 @@ ai-daily-brief/
 
 ---
 
+## Tính năng bổ sung: Affiliate & Product Reviews
+
+### AI Tools Affiliate Scraper
+
+Script riêng để tạo content cho affiliate site và product reviews:
+
+```bash
+python3 affiliate_scraper.py
+```
+
+**Output:** `affiliate/ai-tools-YYYY-MM-DD.md`
+
+**Nguồn thu thập:**
+- FutureTools.io
+- There's AI For That
+- AI Tools Directory
+- TopAI.tools
+
+**Tính năng:**
+- ✅ Thu thập thông tin AI tools
+- ✅ Phân tích với Gemini AI
+- ✅ Tạo content tiếng Việt cho affiliate
+- ✅ Xuất markdown blog post
+
+---
+
 ## Hướng dẫn sử dụng
 
 ### Chạy thủ công
