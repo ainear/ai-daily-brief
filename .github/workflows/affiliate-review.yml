@@ -1,0 +1,41 @@
+name: AI Tools Affiliate Review
+
+on:
+  # Chạy thủ công
+  workflow_dispatch:
+  # Hoặc hàng tuần (Chủ nhật 9 AM Vietnam)
+  schedule:
+    - cron: '0 2 * * 0'
+
+jobs:
+  affiliate-scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install -r ai-daily-brief/requirements.txt
+
+    - name: Run Affiliate Scraper
+      env:
+        FIRECRAWL_API: ${{ secrets.FIRECRAWL_API }}
+        GEMINI_API_KEY: ${{ secrets.G }}
+      run:EMINI_API_KEY |
+        cd ai-daily-brief
+        python3 affiliate_scraper.py
+
+    - name: Commit and push affiliate content
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add ai-daily-brief/affiliate/
+        git diff --staged --quiet || git commit -m "Update AI Tools Affiliate $(date +%Y-%m-%d)"
+        git push
