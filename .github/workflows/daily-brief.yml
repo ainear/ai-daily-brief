@@ -1,9 +1,11 @@
 name: AI Daily Brief
 
 on:
-  # Chạy mỗi ngày lúc 0:00 UTC (7 AM Vietnam)
+  # Chạy 3 lần/ngày: 7AM, 12PM, 7PM Vietnam (0:00, 5:00, 12:00 UTC)
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'      # 7 AM Vietnam
+    - cron: '0 5 * * *'      # 12 PM Vietnam
+    - cron: '0 12 * * *'     # 7 PM Vietnam
   # Cho phép chạy thủ công
   workflow_dispatch:
 
