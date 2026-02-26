@@ -2,64 +2,75 @@
 
 import os
 
-# RSS Feed URLs - Multiple sources
+# RSS Feed URLs - Multiple sources (verified working feeds)
 RSS_FEED_URLS = [
-    # AI News
+    # AI News - TechCrunch
     "https://techcrunch.com/category/artificial-intelligence/feed/",
-    "https://venturebeat.com/category/ai/feed/",
-    "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-    "https://www.ycombinator.com/blog/rss",
+    "https://techcrunch.com/category/apps/feed/",
 
-    # Tech Giants
-    "https://feeds.feedburner.com/blogspot/tNnQi",  # Google AI Blog
+    # AI News - VentureBeat
+    "https://venturebeat.com/category/ai/feed/",
+
+    # MIT Tech Review
+    "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+
+    # Hacker News
+    "https://news.ycombinator.com/rss",
+
+    # Dev.to - Programming community
+    "https://dev.to/feed",
+
+    # Google AI Blog
+    "https://blog.google/technology/ai/rss",
+
+    # OpenAI Blog
     "https://openai.com/blog/rss.xml",
+
+    # Meta AI
     "https://ai.meta.com/feed/",
 
-    # Programming & Dev
-    "https://dev.to/feed",
-    "https://stackoverflow.blog/feed/",
-    "https://css-tricks.com/feed/",
+    # Microsoft AI
+    "https://blogs.microsoft.com/ai/feed/",
 
-    # Mobile & Frontend
-    "https://flutter.dev/blog/feed.atom",
-    "https://medium.com/feed/dartlang",
-    "https://syntax.fm/rss",
-    "https://podcast.jsjiejie.com/",
+    # Flutter
+    "https://medium.com/feed/flutter",
 
-    # Vietnamese Tech
-    "https://techcrunch.com/feed/",
+    # Product Hunt
+    "https://www.producthunt.com/feed.atom",
 ]
 
-# Keywords to filter articles - Expanded
+# Keywords to filter articles - Expanded (more flexible)
 KEYWORDS = [
     # AI Core
-    "ai", "artificial intelligence", "machine learning", "ml",
-    "agent", "agentic", "agents", "automation", "llm", "llms",
-    "gpt", "openai", "gemini", "claude", "deepseek", "minimax", "glm",
+    "ai", "artificial intelligence", "machine learning",
+    "agent", "agentic", "automation",
+    "llm", "gpt", "openai", "gemini", "claude", "deepseek", "minimax", "glm",
 
     # AI Products & Tools
-    "mcp", "model context protocol", "opencode", "cursor", "windsurf",
-    "vibe coding", "vibe", "figma", "stitch",
+    "mcp", "cursor", "windsurf", "vibe", "figma",
+    "opencode", "claude code", "devin",
 
-    # Mobile & Frontend
-    "flutter", "dart", "react", "vue", "svelte", "nextjs", "nuxt",
-    "typescript", "javascript", "mobile", "ios", "android",
+    # Mobile
+    "flutter", "dart", "swift", "kotlin", "react native", "mobile",
+
+    # Frontend
+    "react", "vue", "svelte", "typescript", "javascript", "frontend", "next.js", "nuxt",
 
     # Backend
     "backend", "api", "rest", "graphql", "database",
 
     # Startup & Funding
-    "startup", "funding", "series a", "series b", "venture", "vc",
-    "acquisition", "ipo", "launch", "release", "announce",
+    "startup", "funding", "venture", "vc", "series a", "series b",
+    "acquisition", "launch", "announcement",
 
     # Companies
     "google", "microsoft", "apple", "amazon", "meta", "nvidia",
-    "anthropic", "xai", "mistral", "stability ai",
+    "anthropic", "xai", "mistral",
 ]
 
 # Limits
-MAX_ARTICLES = 30  # Tăng lên 30 bài
-HOURS_BACK = 12  # Giới hạn trong 12 giờ gần nhất
+MAX_ARTICLES = 30
+HOURS_BACK = 24  # 24 hours
 
 # API Configuration - Gemini default, OpenAI fallback
 FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API")
