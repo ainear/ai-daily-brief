@@ -9,12 +9,22 @@ from datetime import datetime
 from firecrawl import FirecrawlApp
 from config import FIRECRAWL_API_KEY, GEMINI_API_KEY, GEMINI_MODEL
 
-# AI Tools Sources
+# AI Tools Sources - Thêm nhiều nguồn hơn
 TOOLS_SOURCES = [
-    "https://www.producthunt.com/categories/artificial-intelligence",
-    "https://alternativeTo/category/artificial-intelligence/",
-    "https://www.g2.com/categories/artificial-intelligence",
-    "https://www.capterra.com/artificial-intelligence-software/",
+    # FutureTools - AI Tools Directory
+    "https://www.futuretools.io/",
+
+    # There's AI For That
+    "https://theresanaiforthat.com/",
+
+    # AI Tools Directory
+    "https://aitoolsdirectory.com/",
+
+    # TopAI - AI Tools
+    "https://topai.tools/",
+
+    # SaaS AI Tools
+    "https://saas-ai-tools.com/",
 ]
 
 
@@ -30,7 +40,7 @@ def extract_tool_info(url: str, app: FirecrawlApp) -> dict:
 
         return {
             "url": url,
-            "content": markdown[:5000]
+            "content": markdown[:8000]
         }
     except Exception as e:
         print(f"Error extracting {url}: {e}")
@@ -45,26 +55,26 @@ def analyze_tool_with_ai(tool_info: dict) -> dict:
 
         prompt = f"""Bạn là chuyên gia viết content affiliate về AI tools.
 
-Hãy phân tích tool sau và tạo content tiếng Việt cho affiliate:
+Hãy phân tích tool/website sau và tạo content tiếng Việt cho affiliate:
 
 URL: {tool_info['url']}
 
 Nội dung:
-{tool_info['content'][:3000]}
+{tool_info['content'][:4000]}
 
 Trả về JSON:
 {{
-  "name": "Tên tool",
+  "name": "Tên tool/website",
   "tagline": "Tagline ngắn",
   "description": "Mô tả 2-3 câu bằng tiếng Việt",
   "features": ["Tính năng 1", "Tính năng 2", "Tính năng 3"],
-  "pricing": "Giá (nếu có)",
+  "pricing": "Giá (nếu có, VD: $19/tháng)",
   "pros": ["Điểm mạnh 1", "Điểm mạnh 2"],
-  "cons": ["Điểm yếu 1", "Điểm yếu 2"],
-  "affiliate_angle": "Góc tiếp cận affiliate: tại sao người dùng nên mua/sử dụng"
+  "cons": ["Điểm yếu 1"],
+  "affiliate_angle": "Góc tiếp cận affiliate: tại sao người dùng nên dùng"
 }}
 
-Trả về JSON hợp lệ, không có markdown."""
+Chỉ trả về JSON hợp lệ, không có markdown."""
 
         response = client.models.generate_content(
             model=GEMINI_MODEL,
@@ -93,13 +103,13 @@ def generate_affiliate_post(tools: list) -> str:
 
 ## Giới thiệu
 
-Chào mừng bạn đến với bài tổng hợp các AI tools hàng đầu tháng này!
+Chào mừng bạn đến với bài tổng hợp các AI tools hàng đầu!
 
 Trong bài viết này, mình sẽ giới thiệu những công cụ AI tốt nhất giúp bạn:
-- Tăng năng suất công việc
-- Tự động hóa các tác vụ lặp đi lặp lại
-- Tạo content nhanh chóng
-- Phát triển business hiệu quả
+- 🚀 Tăng năng suất công việc
+- 🤖 Tự động hóa các tác vụ lặp đi lặp lại
+- ✍️ Tạo content nhanh chóng
+- 💼 Phát triển business hiệu quả
 
 ---
 
@@ -109,51 +119,52 @@ Trong bài viết này, mình sẽ giới thiệu những công cụ AI tốt nh
         if not tool:
             continue
 
-        post += f"""## {i}. {tool.get('name', 'AI Tool')}
+        name = tool.get('name', 'AI Tool')
+        tagline = tool.get('tagline', '')
+        description = tool.get('description', '')
+        pricing = tool.get('pricing', 'Liên hệ website')
+        url = tool.get('url', '#')
 
-**Tagline:** {tool.get('tagline', '')}
+        post += f"""## {i}. {name}
 
-**Mô tả:** {tool.get('description', '')}
+**Tagline:** {tagline}
 
-### Tính năng nổi bật:
+**Mô tả:** {description}
+
+### 🎯 Tính năng nổi bật:
 """
-        for feature in tool.get('features', []):
+        for feature in tool.get('features', [])[:5]:
             post += f"- {feature}\n"
 
         post += f"""
 ### 💰 Giá:
-{tool.get('pricing', 'Liên hệ website')}
+{pricing}
 
-### ✅ Ưu điểm:
+### ⭐ Đánh giá:
 """
         for pro in tool.get('pros', []):
-            post += f"- {pro}\n"
+            post += f"- ✅ {pro}\n"
 
-        post += f"""
-### ❌ Nhược điểm:
-"""
         for con in tool.get('cons', []):
-            post += f"- {con}\n"
+            post += f"- ⚠️ {con}\n"
 
         post += f"""
-### 🎯 Tại sao nên dùng:
-{tool.get('affiliate_angle', '')}
-
-**[Xem chi tiết →]({tool.get('url', '#')})**
+### 🎁 Link affiliate / Xem chi tiết:
+👉 [Xem tại đây →]({url})
 
 ---
+
 """
 
-    post += """
-## Kết luận
+    post += f"""
+## 💡 Kết luận
 
 Các AI tools trên đây là những lựa chọn tốt nhất hiện nay. Tùy vào nhu cầu của bạn, hãy chọn công cụ phù hợp nhất nhé!
 
-**Disclaimer**: Các link trong bài viết là affiliate links. Mình sẽ nhận commission khi bạn mua qua link của mình - không tốn thêm chi phí cho bạn.
-
 ---
+🔄 **Cập nhật lần cuối:** {datetime.now().strftime('%d/%m/%Y')}
 
-*Bài viết được cập nhật: {datetime.now().strftime('%d/%m/%Y')}*
+*Disclaimer: Bài viết có thể chứa affiliate links. Mình nhận commission khi bạn mua qua link của mình - không tốn thêm chi phí cho bạn.*
 """
 
     return post
@@ -180,14 +191,35 @@ def run_affiliate_scraper():
     for source in TOOLS_SOURCES:
         print(f"Extracting: {source}")
         tool_info = extract_tool_info(source, app)
-        if tool_info:
+        if tool_info and tool_info.get('content'):
+            print(f"  ✓ Extracted, analyzing...")
             analyzed = analyze_tool_with_ai(tool_info)
             if analyzed:
                 tools.append(analyzed)
                 print(f"  ✓ {analyzed.get('name', 'Unknown')}")
+        else:
+            print(f"  ✗ Failed to extract")
 
     if not tools:
-        print("No tools extracted.")
+        print("No tools extracted. Trying alternative sources...")
+
+        # Fallback: Try more general AI news sites
+        alt_sources = [
+            "https://news.ycombinator.com/",
+            "https://www.producthunt.com/",
+        ]
+
+        for source in alt_sources:
+            print(f"Alternative: {source}")
+            tool_info = extract_tool_info(source, app)
+            if tool_info and tool_info.get('content'):
+                analyzed = analyze_tool_with_ai(tool_info)
+                if analyzed:
+                    tools.append(analyzed)
+                    print(f"  ✓ {analyzed.get('name', 'Unknown')}")
+
+    if not tools:
+        print("No tools extracted. Please check sources.")
         return
 
     print(f"\nStep 2: Generated {len(tools)} tool reviews")
