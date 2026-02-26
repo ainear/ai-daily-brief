@@ -1,0 +1,42 @@
+name: AI Daily Brief
+
+on:
+  # Chạy mỗi ngày lúc 6:00 AM UTC (1 PM Vietnam)
+  schedule:
+    - cron: '0 6 * * *'
+  # Cho phép chạy thủ công
+  workflow_dispatch:
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install -r ai-daily-brief/requirements.txt
+
+    - name: Run AI Daily Brief
+      env:
+        FIRECRAWL_API: ${{ secrets.FIRECRAWL_API }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: |
+        cd ai-daily-brief
+        python3 main.py
+
+    - name: Commit and push report
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add ai-daily-brief/reports/
+        git diff --staged --quiet || git commit -m "Update AI Daily Brief $(date +%Y-%m-%d)"
+        git push
