@@ -27,8 +27,8 @@ jobs:
     - name: Run Affiliate Scraper
       env:
         FIRECRAWL_API: ${{ secrets.FIRECRAWL_API }}
-        GEMINI_API_KEY: ${{ secrets.G }}
-      run:EMINI_API_KEY |
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: |
         cd ai-daily-brief
         python3 affiliate_scraper.py
 
