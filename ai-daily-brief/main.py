@@ -10,6 +10,7 @@ from rss_fetcher import fetch_all_articles
 from firecrawl_extractor import extract_articles_batch
 from analyzer import analyze_articles
 from consolidator import generate_report, save_report
+from telegram_notifier import send_to_telegram
 from config import FIRECRAWL_API_KEY, GEMINI_API_KEY, OPENAI_API_KEY
 
 
@@ -74,6 +75,12 @@ def main():
     report = generate_report(analyzed)
     filepath = save_report(report)
     print(f"Report saved to: {filepath}\n")
+
+    # Step 5: Send to Telegram (if configured)
+    print("Step 5: Sending to Telegram...")
+    telegram_sent = send_to_telegram(report, analyzed)
+    if telegram_sent:
+        print("Telegram notification sent!\n")
 
     print("=== Complete ===")
     print(f"Report: {filepath}")
