@@ -9,6 +9,10 @@ from datetime import datetime
 from firecrawl import FirecrawlApp
 from config import FIRECRAWL_API_KEY, GEMINI_API_KEY, GEMINI_MODEL
 
+# Telegram config
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
 # AI Tools Sources - Thêm nhiều nguồn hơn
 TOOLS_SOURCES = [
     # FutureTools - AI Tools Directory
@@ -170,6 +174,45 @@ Các AI tools trên đây là những lựa chọn tốt nhất hiện nay. Tùy
     return post
 
 
+def send_telegram_notification(tools: list, filename: str):
+    """Send affiliate report to Telegram."""
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        print("Telegram not configured, skipping notification")
+        return
+
+    # Build message
+    date = datetime.now().strftime("%d/%m/%Y")
+    message = f"🤖 <b>AI Tools Affiliate - {date}</b>\n\n"
+    message += f"📦 Tổng hợp: <b>{len(tools)} tools</b>\n\n"
+
+    # Top 5 tools
+    message += "🔥 <b>Top Tools:</b>\n"
+
+    for i, tool in enumerate(tools[:5], 1):
+        name = tool.get('name', 'Unknown')[:40]
+        tagline = tool.get('tagline', '')[:50]
+        message += f"{i}. <b>{name}</b>\n"
+        message += f"   {tagline}\n"
+
+    message += f"\n📄 <a href='https://github.com/ainear/ai-daily-brief/blob/main/{filename}'>Xem chi tiết →</a>\n"
+    message += f"\n⏰ Generated: {datetime.now().strftime('%H:%M')}"
+
+    # Send
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    try:
+        response = requests.post(url, json={
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": message,
+            "parse_mode": "HTML"
+        })
+        if response.json().get("ok"):
+            print("✅ Telegram notification sent!")
+        else:
+            print(f"❌ Telegram error: {response.json()}")
+    except Exception as e:
+        print(f"❌ Telegram error: {e}")
+
+
 def run_affiliate_scraper():
     """Main function to run affiliate scraper."""
     print("=== AI Tools Affiliate Scraper ===\n")
@@ -235,6 +278,10 @@ def run_affiliate_scraper():
         f.write(post)
 
     print(f"\n✅ Saved to: {filename}")
+
+    # Send to Telegram
+    send_telegram_notification(tools, filename)
+
     print(f"Total tools: {len(tools)}")
 
 
