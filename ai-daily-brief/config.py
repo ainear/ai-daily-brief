@@ -128,3 +128,24 @@ OPENAI_MODEL = "gpt-4o"
 
 # Output directory
 REPORTS_DIR = "reports"
+
+# === Affiliate & Product Review Sources ===
+AFFILIATE_SOURCES = [
+    # Product Hunt - AI
+    "https://www.producthunt.com/categories/artificial-intelligence",
+
+    # AlternativeTo - AI
+    "https://alternativeto.net/category/software/artificial-intelligence/",
+
+    # G2 - AI Software
+    "https://www.g2.com/categories/artificial-intelligence",
+
+    # Capterra - AI
+    "https://www.capterra.com/artificial-intelligence-software/",
+
+    # FutureTools
+    "https://www.futuretools.io/",
+
+    # There's an AI for That
+    "https://theresanaiforthat.com/",
+]
