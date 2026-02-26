@@ -60,17 +60,21 @@ def build_telegram_message(articles: List[Dict]) -> str:
             message += f"• {opp}\n"
         message += "\n"
 
-    # Top 3 articles
-    message += "📰 <b>Tin quan trọng:</b>\n\n"
+    # Top 10 articles (more content)
+    message += "📰 <b>Tin nổi bật (Top 10):</b>\n\n"
 
-    for i, article in enumerate(articles[:3], 1):
+    for i, article in enumerate(articles[:10], 1):
         title = article.get("title", "")[:60]
-        summary = article.get("summary", "")[:120]
+        summary = article.get("summary", "")[:100]
         url = article.get("url", "")
 
         message += f"<b>{i}. {title}</b>\n"
         message += f"{summary}...\n"
-        message += f"<a href=\"{url}\">Đọc tiếp →</a>\n\n"
+        message += f"<a href=\"{url}\">Đọc →</a>\n\n"
+
+    # Show count
+    if len(articles) > 10:
+        message += f"📊 <i>Và {len(articles) - 10} bài viết khác...</i>\n\n"
 
     # Recommendation
     if articles and articles[0].get("actionable"):

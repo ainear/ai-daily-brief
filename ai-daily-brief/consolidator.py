@@ -36,7 +36,7 @@ def generate_report(analyzed_articles: List[Dict]) -> str:
 
     # Extract actionable items
     actionables = [a.get("actionable", "") for a in analyzed_articles if a.get("actionable")]
-    actionable_directions = actionables[:5]
+    actionable_directions = actionables[:10]  # Tăng lên 10
 
     # Generate recommendation
     recommendation = generate_recommendation(analyzed_articles)
@@ -46,7 +46,7 @@ def generate_report(analyzed_articles: List[Dict]) -> str:
 
 ## Tổng quan
 - Số bài viết phân tích: {len(analyzed_articles)}
-- Nguồn: TechCrunch, VentureBeat, MIT Technology Review, Y Combinator
+- Nguồn: TechCrunch, VentureBeat, MIT Tech Review, Hacker News, Dev.to, Google AI, OpenAI, Meta AI, Microsoft AI, Product Hunt, và nhiều nguồn khác...
 
 ---
 
@@ -62,7 +62,7 @@ def generate_report(analyzed_articles: List[Dict]) -> str:
 
 ---
 
-## 5 Hướng hành động cụ thể
+## 10 Hướng hành động cụ thể
 
 {format_numbered_list(actionable_directions)}
 
